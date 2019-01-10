@@ -22,9 +22,8 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 RUN yum install -y epel-release  \
     && yum update -y \
     && yum install python-pip python-devel @development -y \
-    && pip install --upgrade pip setuptools
-
-RUN pip install ansible molecule \
+    && pip install --upgrade pip setuptools \
+    && pip install ansible molecule \
     && yum clean all
 
 RUN mkdir -p /etc/ansible
