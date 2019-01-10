@@ -18,5 +18,18 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 	rm -f /lib/systemd/system/basic.target.wants/*;\
 	rm -f /lib/systemd/system/anaconda.target.wants/*;
 
+# Epel is required for python-pip
+RUN yum install -y epel-release  \
+    && yum update -y \
+    && yum install python-pip python-devel @development -y \
+    && pip install --upgrade pip setuptools
+
+RUN pip install ansible molecule \
+    && yum clean all
+
+RUN mkdir -p /etc/ansible
+
+RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
+
 VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]
